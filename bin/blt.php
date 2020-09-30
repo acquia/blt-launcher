@@ -26,7 +26,6 @@ else {
   echo 'You must set up the blt-launcher dependencies using `composer install`' . PHP_EOL;
   exit(1);
 }
-
 $BLT_LAUNCHER_VERSION = '@git-version@';
 
 $ROOT = FALSE;
@@ -123,6 +122,8 @@ if ($drupalFinder->locateRoot($ROOT)) {
     echo "VENDOR ROOT: " . $drupalFinder->getVendorDir() . PHP_EOL;
   }
 
+  $_SERVER['argv'][] = '-D';
+  $_SERVER['argv'][] = 'disable-targets.blt.shell-alias.init=true';
   exit(require $drupalFinder->getVendorDir() . '/acquia/blt/bin/blt-robo.php');
 }
 
@@ -130,4 +131,3 @@ echo 'The BLT launcher could not find a Drupal site to operate on. Please do *on
 echo '  - Navigate to any where within your Drupal project and try again.' . PHP_EOL;
 echo '  - Add --root=/path/to/drupal so BLT knows where your site is located.' . PHP_EOL;
 exit(1);
-
