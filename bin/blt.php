@@ -122,8 +122,8 @@ if ($drupalFinder->locateRoot($ROOT)) {
     echo "VENDOR ROOT: " . $drupalFinder->getVendorDir() . PHP_EOL;
   }
 
-  $_SERVER['argv'][] = '-D';
-  $_SERVER['argv'][] = 'disable-targets.blt.shell-alias.init=true';
+  $_SERVER['argv'][] = '--define=disable-targets.blt.shell-alias.init=true';
+
   exit(require $drupalFinder->getVendorDir() . '/acquia/blt/bin/blt-robo.php');
 }
 
