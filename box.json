@@ -1,16 +1,6 @@
 {
   "main": "bin/blt.php",
   "output": "blt.phar",
-  "finder": [
-    {
-      "name": "*.php",
-      "exclude": [
-        "Tests"
-      ],
-      "in": "vendor"
-    }
-  ],
   "git-commit": "git-commit",
-  "git-version": "git-version",
-  "stub": true
+  "git-version": "git-version"
 }
