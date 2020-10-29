@@ -27,5 +27,13 @@
     },
     "extra": {
         "phpcodesniffer-search-depth": "4"
+    },
+    "scripts": {
+        "box-install": [
+            "curl -O -L https://github.com/humbug/box/releases/download/3.9.0/box.phar"
+        ],
+        "box-compile": [
+            "php box.phar compile"
+        ]
     }
 }
