@@ -11,6 +11,8 @@ before_script:
 script:
   - ./vendor/bin/phpcs
   - composer box-compile
+  - pwd
+  - ls -al
   - sha1sum blt.phar > blt.version
 
 deploy:
