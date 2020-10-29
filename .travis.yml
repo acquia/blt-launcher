@@ -5,12 +5,12 @@ php:
   - 7.3
 
 before_script:
-  - curl -LSs https://box-project.github.io/box2/installer.php | php
+  - composer box-install
   - composer install --no-interaction --no-progress
 
 script:
   - ./vendor/bin/phpcs
-  - ./box.phar build
+  - composer box-compile
   - sha1sum blt.phar > blt.version
 
 deploy:
