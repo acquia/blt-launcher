@@ -99,7 +99,7 @@ if ($SELF_UPDATE) {
     $result = $updater->update();
     echo $result ? "Updated!\n" : "No update needed!\n";
     exit(0);
-  } catch (\Exception $e) {
+  } catch (Exception $e) {
     echo "Automatic update failed, please download the latest version from https://github.com/acquia/blt-launcher/releases\n";
     exit(1);
   }
@@ -109,25 +109,31 @@ if ($DEBUG) {
   echo "ROOT: " . $ROOT . PHP_EOL;
 }
 
-if ($drupalFinder->locateRoot($ROOT)) {
-  $drupalRoot = $drupalFinder->getDrupalRoot();
-
-  $xdebug = new XdebugHandler('blt', '--ansi');
-  $xdebug->check();
-  unset($xdebug);
-
-  if ($DEBUG) {
-    echo "DRUPAL ROOT: " . $drupalRoot . PHP_EOL;
-    echo "COMPOSER ROOT: " . $drupalFinder->getComposerRoot() . PHP_EOL;
-    echo "VENDOR ROOT: " . $drupalFinder->getVendorDir() . PHP_EOL;
-  }
-
-  $_SERVER['argv'][] = '--define=disable-targets.blt.shell-alias.init=true';
-
-  exit(require $drupalFinder->getVendorDir() . '/acquia/blt/bin/blt-robo.php');
+if (!$drupalFinder->locateRoot($ROOT)) {
+  echo 'The BLT launcher could not find a Drupal site to operate on. Please do *one* of the following:' . PHP_EOL;
+  echo '  - Navigate to any where within your Drupal project and try again.' . PHP_EOL;
+  echo '  - Add --root=/path/to/drupal so BLT knows where your site is located.' . PHP_EOL;
+  exit(1);
 }
 
-echo 'The BLT launcher could not find a Drupal site to operate on. Please do *one* of the following:' . PHP_EOL;
-echo '  - Navigate to any where within your Drupal project and try again.' . PHP_EOL;
-echo '  - Add --root=/path/to/drupal so BLT knows where your site is located.' . PHP_EOL;
-exit(1);
+$drupalRoot = $drupalFinder->getDrupalRoot();
+
+$xdebug = new XdebugHandler('blt', '--ansi');
+$xdebug->check();
+unset($xdebug);
+
+if ($DEBUG) {
+  echo "DRUPAL ROOT: " . $drupalRoot . PHP_EOL;
+  echo "COMPOSER ROOT: " . $drupalFinder->getComposerRoot() . PHP_EOL;
+  echo "VENDOR ROOT: " . $drupalFinder->getVendorDir() . PHP_EOL;
+}
+
+$blt_app = $drupalFinder->getVendorDir() . '/acquia/blt/bin/blt-robo.php';
+if (!file_exists($blt_app)) {
+  echo 'The BLT launcher found a Drupal site, but could not find a BLT installation. Install BLT in this directory using Composer.' . PHP_EOL;
+  exit(1);
+}
+
+// We've finished all of our checks and found BLT and Drupal, now run BLT.
+$_SERVER['argv'][] = '--define=disable-targets.blt.shell-alias.init=true';
+exit(require $blt_app);
