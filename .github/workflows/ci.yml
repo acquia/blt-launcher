@@ -1,0 +1,42 @@
+name: CI
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 2 * * *"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: none
+      - name: Run tests
+        run: |
+          composer validate --no-check-all --ansi
+          composer install --no-interaction --no-progress
+          ./vendor/bin/phpcs
+  build-release:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: none
+      - name: Build
+        run: |
+          composer install --no-dev --optimize-autoloader
+          composer box-install
+          composer box-compile
+          sha1sum blt.phar > blt.version
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            blt.phar
+            blt.version
