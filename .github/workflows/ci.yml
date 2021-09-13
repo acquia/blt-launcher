@@ -37,4 +37,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: [ blt.phar, blt.version ]
+          files: |
+            blt.phar
+            blt.version
