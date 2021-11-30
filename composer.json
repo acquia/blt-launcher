@@ -19,7 +19,10 @@
         "bin/blt"
     ],
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "7.4"
+        }
     },
     "require-dev": {
         "acquia/coding-standards": "^0.8.0",
