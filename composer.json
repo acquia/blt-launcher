@@ -19,10 +19,13 @@
         "bin/blt"
     ],
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "7.4"
+        }
     },
     "require-dev": {
-        "acquia/coding-standards": "^0.5.0",
+        "acquia/coding-standards": "^0.8.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0"
     },
     "extra": {
